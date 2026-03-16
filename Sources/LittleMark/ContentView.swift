@@ -118,16 +118,15 @@ struct ContentView: View {
                             Image(systemName: showPreview ? "rectangle.righthalf.filled" : "rectangle.righthalf.inset.filled")
                         }
                         .help("Toggle Preview (⌥P)")
-                        if showPreview {
-                            Toggle(isOn: Binding(
-                                get: { syncScroll },
-                                set: { syncScroll = $0 }
-                            )) {
-                                Image(systemName: "arrow.up.arrow.down")
-                            }
-                            .toggleStyle(.button)
-                            .help("Sync Scroll")
+                        Toggle(isOn: Binding(
+                            get: { syncScroll },
+                            set: { syncScroll = $0 }
+                        )) {
+                            Image(systemName: "arrow.up.arrow.down")
                         }
+                        .toggleStyle(.button)
+                        .help("Sync Scroll")
+                        .disabled(!showPreview)
                     }
                 }
             }

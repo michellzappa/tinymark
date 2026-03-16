@@ -62,12 +62,19 @@ cp -R ~/Library/Developer/Xcode/DerivedData/LittleMark-*/Build/Products/Release/
 | Cmd+I | Italic |
 | Cmd+K | Link |
 | Cmd+Shift+K | Inline code |
+| Opt+↑ / Opt+↓ | Move line up/down |
+| Cmd+Shift+D | Duplicate line |
+| Cmd+L | Select line |
+| Cmd+Enter | Insert line below |
+| Cmd+Shift+Enter | Insert line above |
+| Cmd+/ | Toggle comment |
 | Cmd+= / Cmd+- | Font size |
 | Cmd+0 | Reset font size |
 | Opt+Z | Toggle word wrap |
 | Opt+P | Toggle preview |
 | Opt+L | Toggle line numbers |
 | Tab / Shift+Tab | Indent/outdent list |
+| Enter | Auto-indent with list continuation |
 
 ## Tech
 

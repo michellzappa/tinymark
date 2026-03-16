@@ -331,6 +331,21 @@ final class LittleMarkTextView: NSTextView {
             performFindPanelAction(item)
             return
         }
+        // Opt+Cmd+F → show find & replace
+        if flags == [.command, .option] && chars == "f" {
+            let item = NSMenuItem()
+            item.tag = Int(NSFindPanelAction.showFindPanel.rawValue)
+            performFindPanelAction(item)
+            // Toggle the replace field visibility
+            if let findBar = enclosingScrollView?.findBarView {
+                // Try to show replace via the standard mechanism
+                let sel = NSSelectorFromString("toggleReplaceBar:")
+                if findBar.responds(to: sel) {
+                    findBar.perform(sel, with: nil)
+                }
+            }
+            return
+        }
         // Cmd+G → find next
         if flags == .command && chars == "g" {
             let item = NSMenuItem()
@@ -363,6 +378,39 @@ final class LittleMarkTextView: NSTextView {
             wrapSelection(prefix: "`", suffix: "`"); return
         }
 
+        // Opt+Up → move line up
+        if flags == .option && event.keyCode == 126 {
+            moveLineUp(); return
+        }
+        // Opt+Down → move line down
+        if flags == .option && event.keyCode == 125 {
+            moveLineDown(); return
+        }
+        // Cmd+Shift+D → duplicate line
+        if flags == [.command, .shift] && chars == "d" {
+            duplicateLine(); return
+        }
+        // Ctrl+Shift+K → delete line
+        if flags == [.control, .shift] && chars == "k" {
+            deleteLine(); return
+        }
+        // Cmd+L → select line
+        if flags == .command && chars == "l" {
+            selectLine(); return
+        }
+        // Cmd+Enter → insert line below (keyCode 36 = Return)
+        if flags == .command && event.keyCode == 36 {
+            insertLineBelow(); return
+        }
+        // Cmd+Shift+Enter → insert line above
+        if flags == [.command, .shift] && event.keyCode == 36 {
+            insertLineAbove(); return
+        }
+        // Cmd+/ → toggle comment (keyCode 44 = /)
+        if flags == .command && event.keyCode == 44 {
+            toggleComment(); return
+        }
+
         // Tab / Shift+Tab for list indentation
         if chars == "\t" {
             if flags.contains(.shift) {
@@ -370,6 +418,11 @@ final class LittleMarkTextView: NSTextView {
             } else if isOnListLine() {
                 indentLines(); return
             }
+        }
+
+        // Enter → auto-indent (keyCode 36 = Return)
+        if flags.isEmpty && event.keyCode == 36 {
+            insertNewlineWithIndent(); return
         }
 
         // Smart pairs — only when there's a selection or at a word boundary
@@ -460,6 +513,220 @@ final class LittleMarkTextView: NSTextView {
             return line
         }
     }
+
+    // MARK: - Move line up/down
+
+    private func moveLineUp() {
+        guard let storage = textStorage else { return }
+        let source = storage.string as NSString
+        let sel = selectedRange()
+        let lineRange = source.lineRange(for: sel)
+
+        // Can't move first line up
+        guard lineRange.location > 0 else { return }
+
+        let prevLineRange = source.lineRange(for: NSRange(location: lineRange.location - 1, length: 0))
+        let currentLine = source.substring(with: lineRange)
+        let prevLine = source.substring(with: prevLineRange)
+
+        let combined = NSRange(location: prevLineRange.location, length: prevLineRange.length + lineRange.length)
+
+        // Ensure both lines end with newline for clean swap
+        let currentTrimmed = currentLine.hasSuffix("\n") ? currentLine : currentLine + "\n"
+        let prevTrimmed = prevLine.hasSuffix("\n") ? prevLine : prevLine + "\n"
+
+        // If we're at the very last line (no trailing newline), adjust
+        let replacement: String
+        if !currentLine.hasSuffix("\n") && prevLine.hasSuffix("\n") {
+            replacement = currentTrimmed + String(prevTrimmed.dropLast())
+        } else {
+            replacement = currentTrimmed + prevTrimmed
+        }
+
+        insertText(replacement, replacementRange: combined)
+        // Place cursor at the moved line
+        let newSelLoc = prevLineRange.location + (sel.location - lineRange.location)
+        setSelectedRange(NSRange(location: newSelLoc, length: sel.length))
+    }
+
+    private func moveLineDown() {
+        guard let storage = textStorage else { return }
+        let source = storage.string as NSString
+        let sel = selectedRange()
+        let lineRange = source.lineRange(for: sel)
+
+        let lineEnd = lineRange.location + lineRange.length
+        // Can't move last line down
+        guard lineEnd < source.length else { return }
+
+        let nextLineRange = source.lineRange(for: NSRange(location: lineEnd, length: 0))
+        let currentLine = source.substring(with: lineRange)
+        let nextLine = source.substring(with: nextLineRange)
+
+        let combined = NSRange(location: lineRange.location, length: lineRange.length + nextLineRange.length)
+
+        let nextTrimmed = nextLine.hasSuffix("\n") ? nextLine : nextLine + "\n"
+        let currentTrimmed = currentLine.hasSuffix("\n") ? currentLine : currentLine + "\n"
+
+        let replacement: String
+        if !nextLine.hasSuffix("\n") && currentLine.hasSuffix("\n") {
+            replacement = nextTrimmed + String(currentTrimmed.dropLast())
+        } else {
+            replacement = nextTrimmed + currentTrimmed
+        }
+
+        insertText(replacement, replacementRange: combined)
+        let newSelLoc = lineRange.location + (nextTrimmed as NSString).length + (sel.location - lineRange.location)
+        setSelectedRange(NSRange(location: newSelLoc, length: sel.length))
+    }
+
+    // MARK: - Duplicate line
+
+    private func duplicateLine() {
+        guard let storage = textStorage else { return }
+        let source = storage.string as NSString
+        let sel = selectedRange()
+        let lineRange = source.lineRange(for: sel)
+        var lineText = source.substring(with: lineRange)
+
+        if !lineText.hasSuffix("\n") {
+            lineText = "\n" + lineText
+        }
+
+        // Insert duplicate after the current line
+        let insertLoc = lineRange.location + lineRange.length
+        insertText(lineText, replacementRange: NSRange(location: insertLoc, length: 0))
+        // Move cursor to the duplicated line
+        setSelectedRange(NSRange(location: insertLoc + (sel.location - lineRange.location) + (lineText.hasPrefix("\n") ? 1 : 0), length: sel.length))
+    }
+
+    // MARK: - Delete line
+
+    private func deleteLine() {
+        guard let storage = textStorage else { return }
+        let source = storage.string as NSString
+        let lineRange = source.lineRange(for: selectedRange())
+        insertText("", replacementRange: lineRange)
+    }
+
+    // MARK: - Select line
+
+    private func selectLine() {
+        guard let storage = textStorage else { return }
+        let source = storage.string as NSString
+        let sel = selectedRange()
+        let lineRange = source.lineRange(for: sel)
+
+        // If already selecting this line, extend to next line
+        if sel == lineRange && lineRange.location + lineRange.length < source.length {
+            let nextLineRange = source.lineRange(for: NSRange(location: lineRange.location + lineRange.length, length: 0))
+            setSelectedRange(NSRange(location: lineRange.location, length: lineRange.length + nextLineRange.length))
+        } else {
+            setSelectedRange(lineRange)
+        }
+    }
+
+    // MARK: - Insert line below/above
+
+    private func insertLineBelow() {
+        guard let storage = textStorage else { return }
+        let source = storage.string as NSString
+        let lineRange = source.lineRange(for: selectedRange())
+        let lineEnd = lineRange.location + lineRange.length
+
+        // Get indentation of current line
+        let line = source.substring(with: lineRange)
+        let indent = leadingWhitespace(line)
+
+        if lineEnd > 0 && source.character(at: lineEnd - 1) == UInt16(Character("\n").asciiValue!) {
+            insertText(indent, replacementRange: NSRange(location: lineEnd, length: 0))
+            setSelectedRange(NSRange(location: lineEnd + (indent as NSString).length, length: 0))
+        } else {
+            insertText("\n" + indent, replacementRange: NSRange(location: lineEnd, length: 0))
+            setSelectedRange(NSRange(location: lineEnd + 1 + (indent as NSString).length, length: 0))
+        }
+    }
+
+    private func insertLineAbove() {
+        guard let storage = textStorage else { return }
+        let source = storage.string as NSString
+        let lineRange = source.lineRange(for: selectedRange())
+
+        let line = source.substring(with: lineRange)
+        let indent = leadingWhitespace(line)
+
+        insertText(indent + "\n", replacementRange: NSRange(location: lineRange.location, length: 0))
+        setSelectedRange(NSRange(location: lineRange.location + (indent as NSString).length, length: 0))
+    }
+
+    // MARK: - Toggle comment
+
+    private func toggleComment() {
+        modifySelectedLines { line in
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if trimmed.hasPrefix("<!-- ") && trimmed.hasSuffix(" -->") {
+                // Unwrap comment
+                var result = line
+                if let startRange = result.range(of: "<!-- ") {
+                    result.removeSubrange(startRange)
+                }
+                if let endRange = result.range(of: " -->", options: .backwards) {
+                    result.removeSubrange(endRange)
+                }
+                return result
+            } else {
+                // Wrap in comment
+                let indent = String(line.prefix(while: { $0 == " " || $0 == "\t" }))
+                let content = String(line.drop(while: { $0 == " " || $0 == "\t" }))
+                return indent + "<!-- " + content + " -->"
+            }
+        }
+    }
+
+    // MARK: - Auto-indent on Enter
+
+    private func insertNewlineWithIndent() {
+        guard let storage = textStorage else { super.insertNewline(self); return }
+        let source = storage.string as NSString
+        let sel = selectedRange()
+        let lineRange = source.lineRange(for: NSRange(location: sel.location, length: 0))
+        let currentLine = source.substring(with: lineRange)
+
+        // Match leading whitespace
+        var indent = leadingWhitespace(currentLine)
+
+        // If the line is a list item, continue the list
+        let trimmed = currentLine.trimmingCharacters(in: .whitespaces)
+        if trimmed.hasPrefix("- ") || trimmed.hasPrefix("* ") || trimmed.hasPrefix("+ ") {
+            // If the list item is empty (just the marker), clear it instead of continuing
+            let marker = String(trimmed.prefix(2))
+            if trimmed == marker || trimmed == marker.trimmingCharacters(in: .whitespaces) {
+                // Clear the empty list item
+                insertText("\n", replacementRange: sel)
+                return
+            }
+            indent += marker
+        } else if let match = trimmed.range(of: #"^\d+\.\s"#, options: .regularExpression) {
+            let numStr = trimmed[match].trimmingCharacters(in: .letters.union(.punctuationCharacters).union(.whitespaces))
+            if let num = Int(numStr) {
+                let nextMarker = "\(num + 1). "
+                // If just the number marker with no content, clear it
+                if trimmed.count <= (numStr.count + 2) {
+                    insertText("\n", replacementRange: sel)
+                    return
+                }
+                indent += nextMarker
+            }
+        }
+
+        insertText("\n" + indent, replacementRange: sel)
+    }
+
+    private func leadingWhitespace(_ line: String) -> String {
+        String(line.prefix(while: { $0 == " " || $0 == "\t" }))
+    }
+
+    // MARK: - Line helpers
 
     private func modifySelectedLines(transform: (String) -> String) {
         guard let storage = textStorage else { return }

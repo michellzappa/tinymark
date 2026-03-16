@@ -61,10 +61,23 @@ struct MarkdownPreviewView: NSViewRepresentable {
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             pageReady = true
+            // Inject the system accent color so links match the editor
+            injectAccentColor()
             // Push any content that was queued while loading
             if !pendingHTML.isEmpty {
                 pushHTML()
             }
+        }
+
+        private func injectAccentColor() {
+            guard let webView else { return }
+            let color = NSColor.controlAccentColor.usingColorSpace(.sRGB) ?? NSColor.controlAccentColor
+            let r = Int(color.redComponent * 255)
+            let g = Int(color.greenComponent * 255)
+            let b = Int(color.blueComponent * 255)
+            let hex = String(format: "#%02x%02x%02x", r, g, b)
+            let js = "document.documentElement.style.setProperty('--link', '\(hex)')"
+            webView.evaluateJavaScript(js, completionHandler: nil)
         }
 
         func scheduleUpdate() {
