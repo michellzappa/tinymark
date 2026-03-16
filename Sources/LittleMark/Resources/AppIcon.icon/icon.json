@@ -1,0 +1,27 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:0.16422,0.27988,0.44092,1.00000",
+      "display-p3:0.02253,0.05249,0.09836,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
+  },
+  "groups" : [
+
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
