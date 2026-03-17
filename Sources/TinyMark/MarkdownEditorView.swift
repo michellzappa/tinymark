@@ -16,7 +16,7 @@ struct MarkdownEditorView: NSViewRepresentable {
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
-        let textView = LittleMarkTextView()
+        let textView = TinyMarkTextView()
 
         textView.isEditable = true
         textView.isSelectable = true
@@ -138,7 +138,7 @@ struct MarkdownEditorView: NSViewRepresentable {
 
     final class Coordinator: NSObject, NSTextViewDelegate {
         var parent: MarkdownEditorView
-        var textView: LittleMarkTextView?
+        var textView: TinyMarkTextView?
         var scrollView: NSScrollView?
         var gutter: LineNumberGutter?
         var isMarkdown: Bool = true
@@ -198,9 +198,9 @@ struct MarkdownEditorView: NSViewRepresentable {
     }
 }
 
-// MARK: - LittleMarkTextView — handles keyboard shortcuts, smart pairs, tab indentation
+// MARK: - TinyMarkTextView — handles keyboard shortcuts, smart pairs, tab indentation
 
-final class LittleMarkTextView: NSTextView {
+final class TinyMarkTextView: NSTextView {
 
     /// The directory of the currently edited file (set by the coordinator)
     var fileDirectory: URL?

@@ -2,14 +2,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "LittleMark",
+    name: "TinyMark",
     platforms: [.macOS(.v14)],
     dependencies: [
         .package(url: "https://github.com/apple/swift-markdown.git", from: "0.4.0"),
     ],
     targets: [
         .executableTarget(
-            name: "LittleMark",
+            name: "TinyMark",
             dependencies: [
                 .product(name: "Markdown", package: "swift-markdown"),
             ],

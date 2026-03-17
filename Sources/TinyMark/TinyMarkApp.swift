@@ -40,7 +40,7 @@ extension FocusedValues {
 // MARK: - App
 
 @main
-struct LittleMarkApp: App {
+struct TinyMarkApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @FocusedValue(\.appState) private var activeState
 
@@ -60,10 +60,10 @@ struct LittleMarkApp: App {
             }
 
             CommandGroup(replacing: .appInfo) {
-                Button("About Little Mark") {
+                Button("About TinyMark") {
                     NSApp.orderFrontStandardAboutPanel()
                 }
-                Button("Welcome to Little Mark") {
+                Button("Welcome to TinyMark") {
                     NotificationCenter.default.post(name: .showWelcome, object: nil)
                 }
             }

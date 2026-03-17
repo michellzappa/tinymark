@@ -20,7 +20,7 @@ struct WelcomeView: View {
                     .resizable()
                     .frame(width: 96, height: 96)
 
-                Text("Welcome to Little Mark")
+                Text("Welcome to TinyMark")
                     .font(.system(size: 28, weight: .bold))
 
                 Text("A minimal Markdown editor")

@@ -1,4 +1,4 @@
-# Little Mark
+# TinyMark
 
 A minimal, fast Markdown editor for macOS.
 
@@ -24,7 +24,7 @@ A minimal, fast Markdown editor for macOS.
 - **Font size control** — Cmd+/Cmd- to adjust, Cmd+0 to reset
 - **Light & dark mode** — follows system appearance
 - **Status bar** — line count, word count, character count, reading time
-- **Open from Finder** — double-click `.md` or `.txt` files to open in Little Mark
+- **Open from Finder** — double-click `.md` or `.txt` files to open in TinyMark
 
 ## Requirements
 
@@ -39,10 +39,10 @@ A minimal, fast Markdown editor for macOS.
 xcodegen generate
 
 # Build release
-xcodebuild -scheme LittleMark -configuration Release build
+xcodebuild -scheme TinyMark -configuration Release build
 
 # Copy to Applications
-cp -R ~/Library/Developer/Xcode/DerivedData/LittleMark-*/Build/Products/Release/Little\ Mark.app /Applications/
+cp -R ~/Library/Developer/Xcode/DerivedData/TinyMark-*/Build/Products/Release/Little\ Mark.app /Applications/
 ```
 
 ## Keyboard Shortcuts
