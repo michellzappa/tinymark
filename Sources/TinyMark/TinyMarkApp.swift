@@ -91,9 +91,10 @@ struct TinyMarkApp: App {
 struct WindowContentView: View {
     @State private var state = AppState()
     @State private var showWelcome = false
+    @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
 
     var body: some View {
-        ContentView(state: state)
+        ContentView(state: state, columnVisibility: $columnVisibility)
             .focusedSceneValue(\.appState, state)
             .onAppear {
                 // Handle files passed via Finder before the window appeared
@@ -144,6 +145,7 @@ struct WindowContentView: View {
             state.setFolder(folder)
         }
         state.selectFile(url)
+        columnVisibility = .detailOnly
     }
 }
 

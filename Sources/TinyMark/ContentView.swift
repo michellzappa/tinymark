@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Bindable var state: AppState
+    @Binding var columnVisibility: NavigationSplitViewVisibility
     @AppStorage("wordWrap") private var wordWrap = true
     @AppStorage("previewUserPref") private var previewUserPref = true
     @AppStorage("fontSize") private var fontSize: Double = 14
@@ -17,7 +18,7 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             FileListView(state: state)
                 .navigationSplitViewColumnWidth(min: 160, ideal: 200, max: 300)
         } detail: {
