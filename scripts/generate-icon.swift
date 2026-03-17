@@ -64,14 +64,27 @@ func generateTextPNG(text: String, outputPath: String) {
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = nsCtx
 
-    let fontSize: CGFloat = 340
-    let font = NSFont.monospacedSystemFont(ofSize: fontSize, weight: .bold)
-    let attrs: [NSAttributedString.Key: Any] = [
+    // Auto-fit: start at 340pt and scale down until text fits ~70% of canvas
+    // Extra padding needed because macOS icon renderer clips inside rounded rect
+    let maxWidth = CGFloat(width) * 0.70
+    let maxHeight = CGFloat(height) * 0.70
+    var fontSize: CGFloat = 340
+    var font = NSFont.monospacedSystemFont(ofSize: fontSize, weight: .bold)
+    var attrs: [NSAttributedString.Key: Any] = [
         .font: font,
         .foregroundColor: NSColor.black,
     ]
-    let str = NSAttributedString(string: text, attributes: attrs)
-    let size = str.size()
+    var str = NSAttributedString(string: text, attributes: attrs)
+    var size = str.size()
+
+    while (size.width > maxWidth || size.height > maxHeight) && fontSize > 40 {
+        fontSize -= 10
+        font = NSFont.monospacedSystemFont(ofSize: fontSize, weight: .bold)
+        attrs[.font] = font
+        str = NSAttributedString(string: text, attributes: attrs)
+        size = str.size()
+    }
+
     let x = (CGFloat(width) - size.width) / 2
     let y = (CGFloat(height) - size.height) / 2
     str.draw(at: NSPoint(x: x, y: y))
@@ -94,7 +107,9 @@ func generateTextPNG(text: String, outputPath: String) {
 
 // MARK: - Generate icon.json
 
-func generateIconJSON(accentHex: String) -> String {
+func generateIconJSON(accentHex: String, textLength: Int) -> String {
+    // Scale glyph down for longer text to prevent clipping in rounded rect
+    let glyphScale: Double = textLength <= 2 ? 1.0 : 0.75
     let (r, g, b) = hexToP3(accentHex)
     let (dr, dg, db) = darken(r, g, b, factor: 0.4)
 
@@ -151,7 +166,7 @@ func generateIconJSON(accentHex: String) -> String {
               "image-name" : "glyph.png",
               "name" : "glyph",
               "position" : {
-                "scale" : 1,
+                "scale" : \(glyphScale),
                 "translation-in-points" : [ 0, 0 ]
               }
             }
@@ -199,7 +214,7 @@ print("Generated \(pngPath)")
 
 // Generate icon.json
 let jsonPath = "\(outputDir)/icon.json"
-let json = generateIconJSON(accentHex: accentHex)
+let json = generateIconJSON(accentHex: accentHex, textLength: text.count)
 try! json.write(toFile: jsonPath, atomically: true, encoding: .utf8)
 print("Generated \(jsonPath)")
 

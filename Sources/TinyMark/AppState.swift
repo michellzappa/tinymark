@@ -22,7 +22,10 @@ final class AppState: FileState {
     private static let markdownExtensions = Set(["md", "markdown"])
 
     var isMarkdownFile: Bool {
-        guard let ext = selectedFile?.pathExtension.lowercased() else { return false }
+        guard let ext = selectedFile?.pathExtension.lowercased() else {
+            // No file selected — default to markdown (the app's primary format)
+            return true
+        }
         return Self.markdownExtensions.contains(ext)
     }
 
