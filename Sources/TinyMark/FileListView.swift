@@ -15,7 +15,7 @@ struct FileListView: View {
             if state.folderURL != nil {
                 ForEach(state.directories, id: \.self) { dir in
                     Button {
-                        state.setFolder(dir)
+                        state.setFolder(dir, isRoot: false)
                     } label: {
                         HStack {
                             Image(systemName: "folder")
@@ -45,6 +45,8 @@ struct FileListView: View {
                             .font(.system(size: 11, weight: .semibold))
                     }
                     .buttonStyle(.plain)
+                    .disabled(!state.canGoUp)
+                    .opacity(state.canGoUp ? 1 : 0.3)
                     .help("Go to parent folder")
 
                     Text(folder.lastPathComponent)
@@ -84,6 +86,11 @@ struct FileListView: View {
                     Label("No Files", systemImage: "doc.text")
                 } description: {
                     Text("No supported files in this folder")
+                } actions: {
+                    if state.canGoUp {
+                        Button("Go Back") { state.goUpDirectory() }
+                    }
+                    Button("Open Folder\u{2026}") { state.openFolder() }
                 }
             }
         }

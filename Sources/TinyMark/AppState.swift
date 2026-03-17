@@ -5,6 +5,8 @@ import Markdown
 @Observable
 final class AppState {
     var folderURL: URL?
+    /// The top-level folder the user opened — navigation is clamped to this.
+    var rootFolderURL: URL?
     var directories: [URL] = []
     var files: [URL] = []
     var selectedFile: URL?
@@ -145,6 +147,7 @@ final class AppState {
         guard url.startAccessingSecurityScopedResource() else { return }
         if isStale { saveBookmark(for: url) }
         folderURL = url
+        rootFolderURL = url
         refreshFiles()
         if let first = files.first {
             selectFile(first)
@@ -168,8 +171,9 @@ final class AppState {
         setFolder(url)
     }
 
-    func setFolder(_ url: URL) {
+    func setFolder(_ url: URL, isRoot: Bool = true) {
         folderURL = url
+        if isRoot { rootFolderURL = url }
         saveBookmark(for: url)
         refreshFiles()
         if let first = files.first {
@@ -177,12 +181,16 @@ final class AppState {
         }
     }
 
+    var canGoUp: Bool {
+        guard let folder = folderURL, let root = rootFolderURL else { return false }
+        return folder.standardizedFileURL != root.standardizedFileURL
+    }
+
     func goUpDirectory() {
-        guard let folder = folderURL else { return }
+        guard canGoUp, let folder = folderURL else { return }
         let parent = folder.deletingLastPathComponent()
-        // Don't go above root
         guard parent.path != folder.path else { return }
-        setFolder(parent)
+        setFolder(parent, isRoot: false)
     }
 
     private static let supportedExtensions = Set(["md", "markdown", "svg", "txt", "text", "json", "yaml", "yml", "toml", "xml", "html", "css", "js", "ts", "py", "swift", "sh", "zsh", "bash", "r", "rb", "go", "rs", "c", "h", "cpp", "hpp", "java", "kt", "lua", "sql", "graphql", "env", "ini", "cfg", "conf", "log", "csv", "tsv"])
