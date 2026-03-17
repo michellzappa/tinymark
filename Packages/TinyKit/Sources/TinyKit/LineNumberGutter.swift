@@ -1,11 +1,11 @@
 import AppKit
 
 /// A ruler view that draws line numbers for an NSTextView.
-final class LineNumberGutter: NSRulerView {
+public final class LineNumberGutter: NSRulerView {
 
     private var textView: NSTextView? { clientView as? NSTextView }
 
-    init(textView: NSTextView) {
+    public init(textView: NSTextView) {
         super.init(scrollView: textView.enclosingScrollView!, orientation: .verticalRuler)
         self.clientView = textView
         self.ruleThickness = 36
@@ -15,7 +15,7 @@ final class LineNumberGutter: NSRulerView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawHashMarksAndLabels(in rect: NSRect) {
+    override public func drawHashMarksAndLabels(in rect: NSRect) {
         guard let textView, let layoutManager = textView.layoutManager,
               let textContainer = textView.textContainer else { return }
 

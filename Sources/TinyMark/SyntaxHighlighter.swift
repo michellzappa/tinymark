@@ -1,9 +1,10 @@
 import AppKit
+import TinyKit
 
 /// Lightweight regex-based Markdown syntax highlighter for NSTextView.
 /// Designed to be called on every text change — keeps it fast by only
 /// doing a single pass of regex matches over the full string.
-final class SyntaxHighlighter {
+final class MarkdownHighlighter: SyntaxHighlighting {
     var baseFont: NSFont = .monospacedSystemFont(ofSize: 14, weight: .regular)
 
     // Cached regex patterns (compiled once)

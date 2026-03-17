@@ -212,7 +212,21 @@ struct MarkdownPreviewView: NSViewRepresentable {
                 border: 1px solid var(--border);
             }
             table th { font-weight: 600; }
+            table th {
+                background: var(--code-bg);
+            }
             del { text-decoration: line-through; }
+            /* Task list checkboxes */
+            li > input[type="checkbox"] {
+                margin-right: 0.4em;
+                vertical-align: middle;
+                position: relative;
+                top: -1px;
+            }
+            li:has(> input[type="checkbox"]) {
+                list-style: none;
+                margin-left: -1.4em;
+            }
             table.frontmatter {
                 width: 100%;
                 margin-bottom: 20px;
