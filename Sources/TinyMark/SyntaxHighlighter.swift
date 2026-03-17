@@ -62,9 +62,26 @@ final class SyntaxHighlighter {
 
         let isDark = NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
 
-        for (regex, style) in Self.patterns {
+        // First pass: collect code block and inline code ranges so other patterns skip them
+        var codeRanges: [NSRange] = []
+        for (regex, style) in Self.patterns where style == .codeBlock || style == .inlineCode {
             regex.enumerateMatches(in: source, range: fullRange) { match, _, _ in
-                guard let match, let range = Optional(match.range) else { return }
+                guard let match else { return }
+                self.applyStyle(style, to: textStorage, range: match.range, match: match, isDark: isDark)
+                codeRanges.append(match.range)
+            }
+        }
+
+        // Second pass: apply remaining patterns, skipping code ranges
+        for (regex, style) in Self.patterns where style != .codeBlock && style != .inlineCode {
+            regex.enumerateMatches(in: source, range: fullRange) { match, _, _ in
+                guard let match else { return }
+                let range = match.range
+                let insideCode = codeRanges.contains { codeRange in
+                    codeRange.location <= range.location &&
+                    codeRange.location + codeRange.length >= range.location + range.length
+                }
+                guard !insideCode else { return }
                 self.applyStyle(style, to: textStorage, range: range, match: match, isDark: isDark)
             }
         }
