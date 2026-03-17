@@ -42,7 +42,7 @@ xcodegen generate
 xcodebuild -scheme TinyMark -configuration Release build
 
 # Copy to Applications
-cp -R ~/Library/Developer/Xcode/DerivedData/TinyMark-*/Build/Products/Release/Little\ Mark.app /Applications/
+cp -R ~/Library/Developer/Xcode/DerivedData/TinyMark-*/Build/Products/Release/TinyMark.app /Applications/
 ```
 
 ## Keyboard Shortcuts
