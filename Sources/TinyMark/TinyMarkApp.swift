@@ -95,6 +95,7 @@ struct WindowContentView: View {
 
     var body: some View {
         ContentView(state: state, columnVisibility: $columnVisibility)
+            .navigationTitle(state.selectedFile?.lastPathComponent ?? "TinyMark")
             .focusedSceneValue(\.appState, state)
             .onAppear {
                 // Handle files passed via Finder before the window appeared
