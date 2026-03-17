@@ -9,31 +9,22 @@ struct MarkdownPreviewView: NSViewRepresentable {
 
     func makeNSView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
+        config.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.setValue(false, forKey: "drawsBackground")
-
-        // Load preview.html from bundle, granting read access to user's files
-        // so relative image paths in markdown work
-        if let url = Bundle.main.url(forResource: "preview", withExtension: "html") {
-            // Grant read access to root so both the bundle template and user's images are accessible
-            webView.loadFileURL(url, allowingReadAccessTo: URL(fileURLWithPath: "/"))
-        }
 
         webView.navigationDelegate = context.coordinator
         context.coordinator.webView = webView
         context.coordinator.baseURL = baseURL
+        context.coordinator.loadTemplate(in: webView, baseURL: baseURL)
         return webView
     }
 
     func updateNSView(_ webView: WKWebView, context: Context) {
-        // If the base URL changed (different file/folder), reload the shell
-        // so WKWebView gets read access to the new directory
+        // If the base URL changed (different file/folder), reload the template
         if context.coordinator.baseURL != baseURL {
             context.coordinator.baseURL = baseURL
-            context.coordinator.pageReady = false
-            if let url = Bundle.main.url(forResource: "preview", withExtension: "html") {
-                webView.loadFileURL(url, allowingReadAccessTo: URL(fileURLWithPath: "/"))
-            }
+            context.coordinator.loadTemplate(in: webView, baseURL: baseURL)
         }
 
         context.coordinator.pendingHTML = html
@@ -57,16 +48,24 @@ struct MarkdownPreviewView: NSViewRepresentable {
         var baseURL: URL?
         var pendingHTML: String = ""
         private var debounceTask: DispatchWorkItem?
-        var pageReady = false
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            pageReady = true
-            // Inject the system accent color so links match the editor
             injectAccentColor()
-            // Push any content that was queued while loading
-            if !pendingHTML.isEmpty {
-                pushHTML()
+            pushHTML()
+        }
+
+        /// Intercept link clicks — open in default browser instead of the preview pane
+        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            if navigationAction.navigationType == .linkActivated, let url = navigationAction.request.url {
+                NSWorkspace.shared.open(url)
+                decisionHandler(.cancel)
+            } else {
+                decisionHandler(.allow)
             }
+        }
+
+        func loadTemplate(in webView: WKWebView, baseURL: URL?) {
+            webView.loadHTMLString(Self.templateHTML, baseURL: baseURL)
         }
 
         private func injectAccentColor() {
@@ -82,7 +81,6 @@ struct MarkdownPreviewView: NSViewRepresentable {
 
         func scheduleUpdate() {
             debounceTask?.cancel()
-            guard pageReady else { return } // Wait for didFinish
             let task = DispatchWorkItem { [weak self] in
                 self?.pushHTML()
             }
@@ -97,12 +95,6 @@ struct MarkdownPreviewView: NSViewRepresentable {
 
         private func pushHTML() {
             guard let webView else { return }
-
-            // Set <base> in <head> so relative image/link paths resolve correctly
-            if let base = baseURL {
-                let baseJS = "var b = document.querySelector('base'); if (!b) { b = document.createElement('base'); document.head.appendChild(b); } b.href = `\(base.absoluteString)`;"
-                webView.evaluateJavaScript(baseJS, completionHandler: nil)
-            }
 
             let escaped = pendingHTML
                 .replacingOccurrences(of: "\\", with: "\\\\")
@@ -119,5 +111,147 @@ struct MarkdownPreviewView: NSViewRepresentable {
                 }
             }
         }
+
+        // MARK: - Inlined template
+
+        private static let templateHTML = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8">
+        <meta name="color-scheme" content="light dark">
+        <style>
+            :root {
+                --text: #24292f;
+                --bg: #ffffff;
+                --code-bg: #f6f8fa;
+                --border: #d0d7de;
+                --link: #007aff;
+                --blockquote: #656d76;
+            }
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --text: #e6edf3;
+                    --bg: #0d1117;
+                    --code-bg: #161b22;
+                    --border: #30363d;
+                    --link: #0a84ff;
+                    --blockquote: #8b949e;
+                }
+            }
+            * { box-sizing: border-box; }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+                color: var(--text);
+                background: transparent;
+                max-width: 100%;
+                padding: 16px 24px;
+                margin: 0;
+                word-wrap: break-word;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                margin-top: 24px;
+                margin-bottom: 16px;
+                font-weight: 600;
+                line-height: 1.25;
+            }
+            h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+            h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+            h3 { font-size: 1.25em; }
+            p { margin-top: 0; margin-bottom: 16px; }
+            a { color: var(--link); text-decoration: none; }
+            a:hover { text-decoration: underline; }
+            code {
+                padding: 0.2em 0.4em;
+                margin: 0;
+                font-size: 85%;
+                background: var(--code-bg);
+                border-radius: 6px;
+                font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+            }
+            pre {
+                padding: 16px;
+                overflow: auto;
+                font-size: 85%;
+                line-height: 1.45;
+                background: var(--code-bg);
+                border-radius: 6px;
+                margin-bottom: 16px;
+            }
+            pre code {
+                padding: 0;
+                background: transparent;
+                border-radius: 0;
+            }
+            blockquote {
+                margin: 0 0 16px 0;
+                padding: 0 1em;
+                color: var(--blockquote);
+                border-left: 0.25em solid var(--border);
+            }
+            ul, ol { padding-left: 2em; margin-bottom: 16px; }
+            li + li { margin-top: 0.25em; }
+            hr {
+                height: 0.25em;
+                padding: 0;
+                margin: 24px 0;
+                background-color: var(--border);
+                border: 0;
+            }
+            img { max-width: 100%; height: auto; }
+            table {
+                border-spacing: 0;
+                border-collapse: collapse;
+                margin-bottom: 16px;
+            }
+            table th, table td {
+                padding: 6px 13px;
+                border: 1px solid var(--border);
+            }
+            table th { font-weight: 600; }
+            del { text-decoration: line-through; }
+            table.frontmatter {
+                width: 100%;
+                margin-bottom: 20px;
+                font-size: 12px;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                overflow: hidden;
+                background: var(--code-bg);
+            }
+            table.frontmatter td {
+                padding: 4px 10px;
+                border: none;
+                border-bottom: 1px solid var(--border);
+                vertical-align: top;
+            }
+            table.frontmatter tr:last-child td { border-bottom: none; }
+            table.frontmatter .fm-key {
+                font-weight: 600;
+                white-space: nowrap;
+                width: 1%;
+                opacity: 0.7;
+                font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+            }
+            #content { padding-bottom: 45vh; }
+            #content:empty::before {
+                content: "No content to preview";
+                color: var(--blockquote);
+                font-style: italic;
+            }
+        </style>
+        </head>
+        <body>
+        <div id="content"></div>
+        <script>
+            function updateContent(html) {
+                document.getElementById('content').innerHTML = html;
+            }
+        </script>
+        </body>
+        </html>
+        """
     }
 }
