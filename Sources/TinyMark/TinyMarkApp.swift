@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import TinyKit
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Files requested via Finder "Open With" before or after launch
@@ -116,7 +117,14 @@ struct WindowContentView: View {
                 }
             }
             .sheet(isPresented: $showWelcome) {
-                WelcomeView(
+                TinyWelcomeView(
+                    appName: "TinyMark",
+                    subtitle: "A minimal Markdown editor",
+                    features: [
+                        ("folder", "Open a Folder", "Browse and edit Markdown files from the sidebar."),
+                        ("rectangle.split.2x1", "Write and Preview", "Side-by-side editor with live preview."),
+                        ("bolt.fill", "Auto-Save", "Changes saved automatically as you type."),
+                    ],
                     onOpenFolder: {
                         showWelcome = false
                         WelcomeState.markLaunched()
@@ -176,9 +184,9 @@ struct WindowCloseGuard: NSViewRepresentable {
         weak var originalDelegate: NSWindowDelegate?
 
         func windowShouldClose(_ sender: NSWindow) -> Bool {
-            guard let state, state.isDirty else { return true }
-            // Force save before closing (autosave may not have fired yet)
-            state.save()
+            guard let state else { return true }
+            // Save all dirty tabs before closing
+            state.saveAllDirtyTabs()
             return true
         }
 

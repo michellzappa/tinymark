@@ -9,6 +9,8 @@ packages:
   swift-markdown:
     url: https://github.com/apple/swift-markdown.git
     from: "0.4.0"
+  TinyKit:
+    path: Packages/TinyKit
 
 targets:
   TinyMark:
@@ -22,7 +24,7 @@ targets:
         buildPhase: resources
       - path: Sources/TinyMark/Resources/preview.html
         buildPhase: resources
-      - path: AppIcon.icon
+      - path: Sources/TinyMark/Resources/AppIcon.icon
         buildPhase: resources
     info:
       path: Sources/TinyMark/Info.plist
@@ -53,8 +55,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.tinymark.app
         PRODUCT_NAME: "TinyMark"
-        MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.2.0"
+        CURRENT_PROJECT_VERSION: "3"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: ""
@@ -72,3 +74,5 @@ targets:
     dependencies:
       - package: swift-markdown
         product: Markdown
+      - package: TinyKit
+        product: TinyKit

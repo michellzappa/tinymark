@@ -1,37 +1,47 @@
 import SwiftUI
 
-struct WelcomeView: View {
-    var onOpenFolder: () -> Void
-    var onDismiss: () -> Void
+public struct TinyWelcomeView: View {
+    public let appName: String
+    public let subtitle: String
+    public let features: [(icon: String, title: String, description: String)]
+    public let onOpenFolder: () -> Void
+    public let onDismiss: () -> Void
 
-    private let features: [(icon: String, title: String, description: String)] = [
-        ("folder", "Open a Folder", "Browse and edit Markdown files from the sidebar."),
-        ("rectangle.split.2x1", "Write and Preview", "Side-by-side editor with live preview."),
-        ("bolt.fill", "Auto-Save", "Changes saved automatically as you type."),
-    ]
+    public init(
+        appName: String,
+        subtitle: String,
+        features: [(icon: String, title: String, description: String)],
+        onOpenFolder: @escaping () -> Void,
+        onDismiss: @escaping () -> Void
+    ) {
+        self.appName = appName
+        self.subtitle = subtitle
+        self.features = features
+        self.onOpenFolder = onOpenFolder
+        self.onDismiss = onDismiss
+    }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             Spacer()
 
-            // Icon + title
             VStack(spacing: 12) {
                 Image(nsImage: NSApp.applicationIconImage)
                     .resizable()
                     .frame(width: 96, height: 96)
 
-                Text("Welcome to TinyMark")
+                Text("Welcome to \(appName)")
                     .font(.system(size: 28, weight: .bold))
 
-                Text("A minimal Markdown editor")
+                Text(subtitle)
                     .font(.system(size: 14))
                     .foregroundStyle(.secondary)
             }
             .padding(.bottom, 36)
 
-            // Feature list
             VStack(alignment: .leading, spacing: 24) {
-                ForEach(features, id: \.title) { feature in
+                ForEach(features.indices, id: \.self) { i in
+                    let feature = features[i]
                     HStack(spacing: 14) {
                         Image(systemName: feature.icon)
                             .font(.system(size: 22))
@@ -53,7 +63,6 @@ struct WelcomeView: View {
 
             Spacer()
 
-            // Actions
             VStack(spacing: 10) {
                 Button(action: onOpenFolder) {
                     Text("Open a Folder")
@@ -79,14 +88,14 @@ struct WelcomeView: View {
 
 // MARK: - First-launch check
 
-enum WelcomeState {
+public enum WelcomeState {
     private static let key = "hasLaunchedBefore"
 
-    static var isFirstLaunch: Bool {
+    public static var isFirstLaunch: Bool {
         !UserDefaults.standard.bool(forKey: key)
     }
 
-    static func markLaunched() {
+    public static func markLaunched() {
         UserDefaults.standard.set(true, forKey: key)
     }
 }

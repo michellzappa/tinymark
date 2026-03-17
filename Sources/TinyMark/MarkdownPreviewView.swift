@@ -1,5 +1,6 @@
 import SwiftUI
 import WebKit
+import TinyKit
 
 struct MarkdownPreviewView: NSViewRepresentable {
     let html: String

@@ -11,14 +11,16 @@ set -euo pipefail
 # Prerequisites:
 #   - Xcode command line tools
 #   - gh CLI (brew install gh), authenticated
-#   - For --notarize: Developer ID Application cert + env vars:
-#       NOTARIZE_APPLE_ID    (your Apple ID email)
-#       NOTARIZE_TEAM_ID     (your team ID, e.g. 992N457T8D)
-#       NOTARIZE_PASSWORD    (app-specific password from appleid.apple.com)
+#   - For --notarize: Developer ID Application cert + keychain profile:
+#       xcrun notarytool store-credentials "notarize" \
+#         --apple-id "mz@centaur-labs.io" --team-id "992N457T8D" --password "APP_SPECIFIC_PW"
 
 VERSION="${1:?Usage: release.sh <version-tag> [--notarize]}"
 NOTARIZE=false
 [[ "${2:-}" == "--notarize" ]] && NOTARIZE=true
+
+# Strip leading 'v' for the marketing version (v1.1.0 → 1.1.0)
+MARKETING_VERSION="${VERSION#v}"
 
 SIGN_IDENTITY="Developer ID Application: CENTAUR LABS OU (992N457T8D)"
 TEAM_ID="992N457T8D"
@@ -39,6 +41,7 @@ xcodebuild -project "$PROJECT_DIR/TinyMark.xcodeproj" \
     DEVELOPMENT_TEAM="$TEAM_ID" \
     CODE_SIGN_STYLE=Manual \
     OTHER_CODE_SIGN_FLAGS="--options=runtime" \
+    MARKETING_VERSION="$MARKETING_VERSION" \
     DSTROOT="$INSTALL_ROOT" \
     install 2>&1 | tail -5
 
@@ -61,9 +64,7 @@ if $NOTARIZE; then
 
     echo "==> Submitting for notarization..."
     xcrun notarytool submit "$ZIP_PATH" \
-        --apple-id "${NOTARIZE_APPLE_ID:?Set NOTARIZE_APPLE_ID}" \
-        --team-id "${NOTARIZE_TEAM_ID:?Set NOTARIZE_TEAM_ID}" \
-        --password "${NOTARIZE_PASSWORD:?Set NOTARIZE_PASSWORD}" \
+        --keychain-profile "notarize" \
         --wait
 
     echo "==> Stapling notarization ticket..."

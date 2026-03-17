@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import TinyKit
 
 struct MarkdownEditorView: NSViewRepresentable {
     @Binding var text: String
