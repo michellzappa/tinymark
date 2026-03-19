@@ -1,23 +1,32 @@
 #!/bin/bash
 set -euo pipefail
 
-# TinyMark release script
-# Builds, signs, optionally notarizes, and publishes to GitHub Releases.
+# Generic Tiny* app release script
+# Builds, signs, notarizes, and publishes to GitHub Releases.
 #
 # Usage:
-#   ./scripts/release.sh v1.0.0              # build + GitHub release (no notarization)
-#   ./scripts/release.sh v1.0.0 --notarize   # build + notarize + GitHub release
+#   ./scripts/release.sh v1.0.0                  # build + notarize + GitHub release
+#   ./scripts/release.sh v1.0.0 --skip-notarize  # build + GitHub release (no notarization)
 #
 # Prerequisites:
 #   - Xcode command line tools
 #   - gh CLI (brew install gh), authenticated
-#   - For --notarize: Developer ID Application cert + keychain profile:
+#   - For notarization: Developer ID Application cert + keychain profile:
 #       xcrun notarytool store-credentials "notarize" \
 #         --apple-id "mz@centaur-labs.io" --team-id "992N457T8D" --password "APP_SPECIFIC_PW"
 
-VERSION="${1:?Usage: release.sh <version-tag> [--notarize]}"
-NOTARIZE=false
-[[ "${2:-}" == "--notarize" ]] && NOTARIZE=true
+VERSION="${1:?Usage: release.sh <version-tag> [--skip-notarize]}"
+SKIP_NOTARIZE=false
+[[ "${2:-}" == "--skip-notarize" ]] && SKIP_NOTARIZE=true
+
+# Auto-detect app name from .xcodeproj
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+XCODEPROJ=$(ls -d "$PROJECT_DIR"/*.xcodeproj 2>/dev/null | head -1)
+if [[ -z "$XCODEPROJ" ]]; then
+    echo "ERROR: No .xcodeproj found in $PROJECT_DIR"
+    exit 1
+fi
+APP_NAME=$(basename "$XCODEPROJ" .xcodeproj)
 
 # Strip leading 'v' for the marketing version (v1.1.0 → 1.1.0)
 MARKETING_VERSION="${VERSION#v}"
@@ -25,16 +34,15 @@ MARKETING_VERSION="${VERSION#v}"
 SIGN_IDENTITY="Developer ID Application: CENTAUR LABS OU (992N457T8D)"
 TEAM_ID="992N457T8D"
 
-PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BUILD_DIR="$PROJECT_DIR/.build/xcode"
-INSTALL_ROOT="/tmp/tinymark-release"
-APP_PATH="$INSTALL_ROOT/Applications/TinyMark.app"
-ZIP_PATH="/tmp/TinyMark-${VERSION}.zip"
+INSTALL_ROOT="/tmp/${APP_NAME,,}-release"
+APP_PATH="$INSTALL_ROOT/Applications/$APP_NAME.app"
+ZIP_PATH="/tmp/$APP_NAME-${VERSION}.zip"
 
-echo "==> Building TinyMark ${VERSION} (signed with Developer ID)..."
+echo "==> Building $APP_NAME ${VERSION} (signed with Developer ID)..."
 rm -rf "$INSTALL_ROOT"
-xcodebuild -project "$PROJECT_DIR/TinyMark.xcodeproj" \
-    -scheme TinyMark \
+xcodebuild -project "$XCODEPROJ" \
+    -scheme "$APP_NAME" \
     -configuration Release \
     -derivedDataPath "$BUILD_DIR" \
     CODE_SIGN_IDENTITY="$SIGN_IDENTITY" \
@@ -57,8 +65,8 @@ echo "==> Verifying signature..."
 codesign --verify --deep --strict "$APP_PATH"
 echo "    Signature OK"
 
-# Notarize if requested
-if $NOTARIZE; then
+# Notarize unless skipped
+if ! $SKIP_NOTARIZE; then
     echo "==> Creating zip for notarization..."
     ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
@@ -83,12 +91,12 @@ echo "    $ZIP_PATH ($SIZE)"
 # Create GitHub release
 echo "==> Publishing GitHub release ${VERSION}..."
 gh release create "$VERSION" "$ZIP_PATH" \
-    --title "TinyMark ${VERSION}" \
+    --title "$APP_NAME ${VERSION}" \
     --notes "$(cat <<EOF
-## TinyMark ${VERSION}
+## $APP_NAME ${VERSION}
 
 ### Installation
-Download **TinyMark-${VERSION}.zip**, unzip, and drag to /Applications.
+Download **$APP_NAME-${VERSION}.zip**, unzip, and drag to /Applications.
 EOF
 )" \
     --repo "$(gh repo view --json nameWithOwner -q .nameWithOwner)"
