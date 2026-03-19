@@ -2,29 +2,6 @@ import SwiftUI
 import AppKit
 import TinyKit
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
-    /// Files requested via Finder "Open With" before or after launch
-    static var pendingFiles: [URL] = []
-    static var onOpenFiles: (([URL]) -> Void)?
-
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(.regular)
-        NSApp.activate(ignoringOtherApps: true)
-    }
-
-    func application(_ application: NSApplication, open urls: [URL]) {
-        if let handler = Self.onOpenFiles {
-            handler(urls)
-        } else {
-            Self.pendingFiles.append(contentsOf: urls)
-        }
-    }
-}
-
-extension Notification.Name {
-    static let showWelcome = Notification.Name("showWelcome")
-}
-
 // MARK: - FocusedValue key for per-window AppState
 
 struct FocusedAppStateKey: FocusedValueKey {
@@ -42,7 +19,7 @@ extension FocusedValues {
 
 @main
 struct TinyMarkApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @NSApplicationDelegateAdaptor(TinyAppDelegate.self) var appDelegate
     @FocusedValue(\.appState) private var activeState
 
     var body: some Scene {
@@ -101,9 +78,9 @@ struct WindowContentView: View {
             .focusedSceneValue(\.appState, state)
             .onAppear {
                 // Handle files passed via Finder before the window appeared
-                if !AppDelegate.pendingFiles.isEmpty {
-                    let files = AppDelegate.pendingFiles
-                    AppDelegate.pendingFiles.removeAll()
+                if !TinyAppDelegate.pendingFiles.isEmpty {
+                    let files = TinyAppDelegate.pendingFiles
+                    TinyAppDelegate.pendingFiles.removeAll()
                     openFiles(files)
                 } else if WelcomeState.isFirstLaunch {
                     showWelcome = true
@@ -112,36 +89,24 @@ struct WindowContentView: View {
                 }
 
                 // Handle files opened after launch
-                AppDelegate.onOpenFiles = { [weak state] urls in
+                TinyAppDelegate.onOpenFiles = { [weak state] urls in
                     guard let state else { return }
                     openFilesInState(urls, state: state)
                 }
             }
-            .sheet(isPresented: $showWelcome) {
-                TinyWelcomeView(
-                    appName: "TinyMark",
-                    subtitle: "A minimal Markdown editor",
-                    features: [
-                        ("folder", "Open a Folder", "Browse and edit Markdown files from the sidebar."),
-                        ("rectangle.split.2x1", "Write and Preview", "Side-by-side editor with live preview."),
-                        ("bolt.fill", "Auto-Save", "Changes saved automatically as you type."),
-                    ],
-                    onOpenFolder: {
-                        showWelcome = false
-                        WelcomeState.markLaunched()
-                        state.openFolder()
-                    },
-                    onDismiss: {
-                        showWelcome = false
-                        WelcomeState.markLaunched()
-                        state.restoreLastFolder()
-                    }
-                )
-            }
+            .welcomeSheet(
+                isPresented: $showWelcome,
+                appName: "TinyMark",
+                subtitle: "A minimal Markdown editor",
+                features: [
+                    ("folder", "Open a Folder", "Browse and edit Markdown files from the sidebar."),
+                    ("rectangle.split.2x1", "Write and Preview", "Side-by-side editor with live preview."),
+                    ("bolt.fill", "Auto-Save", "Changes saved automatically as you type."),
+                ],
+                onOpen: { state.openFolder() },
+                onDismiss: { state.restoreLastFolder() }
+            )
             .background(WindowCloseGuard(state: state))
-            .onReceive(NotificationCenter.default.publisher(for: .showWelcome)) { _ in
-                showWelcome = true
-            }
     }
 
     private func openFiles(_ urls: [URL]) {
@@ -156,53 +121,6 @@ struct WindowContentView: View {
         }
         state.selectFile(url)
         columnVisibility = .detailOnly
-    }
-}
-
-/// Hooks into the window delegate to warn about unsaved changes on close
-struct WindowCloseGuard: NSViewRepresentable {
-    let state: AppState
-
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        context.coordinator.state = state
-        DispatchQueue.main.async {
-            guard let window = view.window else { return }
-            context.coordinator.originalDelegate = window.delegate
-            window.delegate = context.coordinator
-        }
-        return view
-    }
-
-    func updateNSView(_ nsView: NSView, context: Context) {
-        context.coordinator.state = state
-    }
-
-    func makeCoordinator() -> Coordinator { Coordinator() }
-
-    final class Coordinator: NSObject, NSWindowDelegate {
-        var state: AppState?
-        weak var originalDelegate: NSWindowDelegate?
-
-        func windowShouldClose(_ sender: NSWindow) -> Bool {
-            guard let state else { return true }
-            // Save all dirty tabs before closing
-            state.saveAllDirtyTabs()
-            return true
-        }
-
-        // Forward all other delegate calls to SwiftUI's original delegate
-        func windowWillClose(_ notification: Notification) {
-            originalDelegate?.windowWillClose?(notification)
-        }
-
-        func windowDidBecomeKey(_ notification: Notification) {
-            originalDelegate?.windowDidBecomeKey?(notification)
-        }
-
-        func windowDidResignKey(_ notification: Notification) {
-            originalDelegate?.windowDidResignKey?(notification)
-        }
     }
 }
 

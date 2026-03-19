@@ -6,7 +6,7 @@ let package = Package(
     platforms: [.macOS(.v26)],
     dependencies: [
         .package(url: "https://github.com/apple/swift-markdown.git", from: "0.4.0"),
-        .package(path: "Packages/TinyKit"),
+        .package(path: "../Packages/TinyKit"),
     ],
     targets: [
         .executableTarget(

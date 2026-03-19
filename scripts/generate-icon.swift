@@ -52,11 +52,11 @@ func generateCirclePNG(accentHex: String, size: Int, outputPath: String) {
     ctx.addEllipse(in: rect)
     ctx.clip()
 
-    // Gradient: darker accent (top) → accent (bottom)
+    // Gradient: very dark accent (top) → dark accent (bottom)
     // In CGContext, y=0 is bottom, so startPoint is bottom, endPoint is top
     let colors = [
-        CGColor(colorSpace: colorSpace, components: [r * 0.9, g * 0.9, b * 0.9, 1.0])!,
-        CGColor(colorSpace: colorSpace, components: [r, g, b, 1.0])!,
+        CGColor(colorSpace: colorSpace, components: [r * 0.2, g * 0.2, b * 0.2, 1.0])!,
+        CGColor(colorSpace: colorSpace, components: [r * 0.35, g * 0.35, b * 0.35, 1.0])!,
     ]
     let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: nil)!
     ctx.drawLinearGradient(
@@ -136,7 +136,7 @@ func copyCustomSymbolPNG(filePath: String, size: Int, outputPath: String) {
     let cgSize = CGSize(width: size, height: size)
     let finalImage = NSImage(size: cgSize, flipped: false) { rect in
         let srcSize = sourceImage.size
-        let scale = min(rect.width * 0.5635 / srcSize.width, rect.height * 0.5635 / srcSize.height)
+        let scale = min(rect.width * 0.49 / srcSize.width, rect.height * 0.49 / srcSize.height)
         let w = srcSize.width * scale
         let h = srcSize.height * scale
         let x = (rect.width - w) / 2
@@ -159,13 +159,14 @@ func copyCustomSymbolPNG(filePath: String, size: Int, outputPath: String) {
 func generateIconJSON(accentHex: String) -> String {
     let (r, g, b) = hexToComponents(accentHex)
     let accentColor = srgbString(r, g, b)
+    let darkerAccent = srgbString(r * 0.7, g * 0.7, b * 0.7)
 
     return """
     {
       "fill" : {
         "linear-gradient" : [
-          "display-p3:1.00000,1.00000,1.00000,1.00000",
-          "\(accentColor)"
+          "\(accentColor)",
+          "\(darkerAccent)"
         ],
         "orientation" : {
           "start" : {
@@ -174,7 +175,7 @@ func generateIconJSON(accentHex: String) -> String {
           },
           "stop" : {
             "x" : 0.5,
-            "y" : 0.7
+            "y" : 1
           }
         }
       },
@@ -198,7 +199,7 @@ func generateIconJSON(accentHex: String) -> String {
               "image-name" : "circle.png",
               "name" : "circle",
               "position" : {
-                "scale" : 2,
+                "scale" : 2.2,
                 "translation-in-points" : [
                   0,
                   0

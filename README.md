@@ -2,7 +2,7 @@
 
 A minimal, fast Markdown editor for macOS.
 
-![macOS](https://img.shields.io/badge/macOS-14%2B-blue)
+![macOS](https://img.shields.io/badge/macOS-26%2B-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
 
 ## Features
@@ -28,21 +28,20 @@ A minimal, fast Markdown editor for macOS.
 
 ## Requirements
 
-- macOS 14.0+
-- Xcode 16+ (to build)
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+- macOS 26.0+
+- Xcode 26+ (to build)
 
 ## Build
 
 ```bash
-# Generate the Xcode project
-xcodegen generate
+xcodebuild clean build \
+  -project TinyMark.xcodeproj \
+  -scheme TinyMark \
+  -configuration Release \
+  -derivedDataPath /tmp/tinybuild/tinymark \
+  CODE_SIGN_IDENTITY="-"
 
-# Build release
-xcodebuild -scheme TinyMark -configuration Release build
-
-# Copy to Applications
-cp -R ~/Library/Developer/Xcode/DerivedData/TinyMark-*/Build/Products/Release/TinyMark.app /Applications/
+cp -R /tmp/tinybuild/tinymark/Build/Products/Release/TinyMark.app /Applications/
 ```
 
 ## Keyboard Shortcuts
