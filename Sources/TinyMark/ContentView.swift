@@ -12,6 +12,8 @@ struct ContentView: View {
     @AppStorage("showLineNumbers") private var showLineNumbers = false
     @State private var scrollBridge = ScrollBridge()
     @State private var eventMonitor: Any?
+    @State private var aiState = AIState()
+    @State private var editorBridge = EditorBridge()
 
     /// Preview is shown only when user wants it AND the file is markdown/svg
     private var showPreview: Bool {
@@ -30,16 +32,17 @@ struct ContentView: View {
                 }
                 if showPreview {
                     EditorSplitView {
-                        MarkdownEditorView(text: $state.content, wordWrap: $wordWrap, fontSize: $fontSize, showLineNumbers: $showLineNumbers, isMarkdown: state.isMarkdownFile, fileDirectory: state.selectedFile?.deletingLastPathComponent(), scrollBridge: scrollBridge)
+                        MarkdownEditorView(text: $state.content, wordWrap: $wordWrap, fontSize: $fontSize, showLineNumbers: $showLineNumbers, isMarkdown: state.isMarkdownFile, fileDirectory: state.selectedFile?.deletingLastPathComponent(), scrollBridge: scrollBridge, editorBridge: editorBridge)
                     } right: {
                         MarkdownPreviewView(html: state.renderedHTML, baseURL: state.selectedFile?.deletingLastPathComponent(), scrollBridge: scrollBridge, syncScroll: syncScroll)
                     }
                 } else {
-                    MarkdownEditorView(text: $state.content, wordWrap: $wordWrap, fontSize: $fontSize, showLineNumbers: $showLineNumbers, isMarkdown: state.isMarkdownFile, fileDirectory: state.selectedFile?.deletingLastPathComponent(), scrollBridge: scrollBridge)
+                    MarkdownEditorView(text: $state.content, wordWrap: $wordWrap, fontSize: $fontSize, showLineNumbers: $showLineNumbers, isMarkdown: state.isMarkdownFile, fileDirectory: state.selectedFile?.deletingLastPathComponent(), scrollBridge: scrollBridge, editorBridge: editorBridge)
                 }
 
                 StatusBarView(text: state.content)
             }
+            .modifier(CmdKOverlay(aiState: aiState, editorBridge: editorBridge, content: state.content, fileExtension: state.selectedFile?.pathExtension))
         }
         .onDisappear {
             if let monitor = eventMonitor {
@@ -83,6 +86,10 @@ struct ContentView: View {
                 }
                 if flags == .command && chars == "0" {
                     fontSize = 14
+                    return nil
+                }
+                if flags == .command && chars == "k" {
+                    aiState.activate(selection: editorBridge.currentSelection, range: editorBridge.currentSelectedRange, bridge: editorBridge, folderURL: state.folderURL, supportedExtensions: state.supportedExtensions)
                     return nil
                 }
                 if flags == .command && (chars == "f" || chars == "g") {

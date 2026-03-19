@@ -10,6 +10,7 @@ struct MarkdownEditorView: View {
     var isMarkdown: Bool
     var fileDirectory: URL?
     var scrollBridge: ScrollBridge
+    var editorBridge: EditorBridge?
 
     var body: some View {
         TinyEditorView(
@@ -22,7 +23,8 @@ struct MarkdownEditorView: View {
             commentStyle: .html,
             fileDirectory: fileDirectory,
             scrollBridge: scrollBridge,
-            enableImageDrop: true
+            enableImageDrop: true,
+            editorBridge: editorBridge
         )
     }
 }

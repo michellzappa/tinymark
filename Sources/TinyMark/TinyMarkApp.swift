@@ -85,6 +85,7 @@ struct TinyMarkApp: App {
                 .keyboardShortcut("s", modifiers: [.command, .shift])
             }
         }
+
     }
 }
 
