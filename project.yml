@@ -35,10 +35,19 @@ targets:
             LSHandlerRank: Default
             LSItemContentTypes:
               - net.daringfireball.markdown
-              - public.plain-text
             CFBundleTypeExtensions:
               - md
               - markdown
+              - mdown
+              - mkd
+              - mkdn
+              - mdx
+          - CFBundleTypeName: Plain Text
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - public.plain-text
+            CFBundleTypeExtensions:
               - txt
               - text
         LSApplicationCategoryType: public.app-category.productivity
@@ -51,6 +60,10 @@ targets:
               public.filename-extension:
                 - md
                 - markdown
+                - mdown
+                - mkd
+                - mkdn
+                - mdx
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.tinymark.app
