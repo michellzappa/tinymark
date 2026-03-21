@@ -47,6 +47,8 @@ struct TinyMarkApp: App {
             }
 
             CommandGroup(after: .newItem) {
+                OpenFileButton()
+
                 OpenFolderButton()
 
                 Divider()
@@ -60,6 +62,22 @@ struct TinyMarkApp: App {
                     activeState?.saveAs()
                 }
                 .keyboardShortcut("s", modifiers: [.command, .shift])
+
+                Divider()
+
+                ExportPDFButton()
+                ExportHTMLButton()
+
+                Divider()
+
+                CopyRichTextButton()
+            }
+
+            CommandGroup(replacing: .sidebar) {
+                Button("Toggle Sidebar") {
+                    NotificationCenter.default.post(name: .toggleSidebar, object: nil)
+                }
+                .keyboardShortcut("s", modifiers: [.command, .control])
             }
         }
 
@@ -94,6 +112,11 @@ struct WindowContentView: View {
                     openFilesInState(urls, state: state)
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: .toggleSidebar)) { _ in
+                withAnimation {
+                    columnVisibility = columnVisibility == .detailOnly ? .automatic : .detailOnly
+                }
+            }
             .welcomeSheet(
                 isPresented: $showWelcome,
                 appName: "TinyMark",
@@ -124,7 +147,26 @@ struct WindowContentView: View {
     }
 }
 
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let toggleSidebar = Notification.Name("toggleSidebar")
+}
+
+// MARK: - Menu Buttons
+
 /// Standalone button so @FocusedValue resolves reliably in menu context
+struct OpenFileButton: View {
+    @FocusedValue(\.appState) private var state
+
+    var body: some View {
+        Button("Open File\u{2026}") {
+            state?.openFile()
+        }
+        .keyboardShortcut("o", modifiers: .command)
+    }
+}
+
 struct OpenFolderButton: View {
     @FocusedValue(\.appState) private var state
 
@@ -132,7 +174,7 @@ struct OpenFolderButton: View {
         Button("Open Folder\u{2026}") {
             state?.openFolder()
         }
-        .keyboardShortcut("o", modifiers: .command)
+        .keyboardShortcut("o", modifiers: [.command, .shift])
     }
 }
 
@@ -145,5 +187,51 @@ struct NewWindowButton: View {
             openWindow(id: "editor")
         }
         .keyboardShortcut("n", modifiers: [.command, .shift])
+    }
+}
+
+// MARK: - Export Buttons
+
+struct ExportPDFButton: View {
+    @FocusedValue(\.appState) private var state
+
+    var body: some View {
+        Button("Export as PDF\u{2026}") {
+            guard let state else { return }
+            let name = state.selectedFile?.lastPathComponent ?? "document.md"
+            ExportManager.exportPDF(
+                html: state.exportHTML,
+                baseURL: state.selectedFile?.deletingLastPathComponent(),
+                suggestedName: name
+            )
+        }
+        .keyboardShortcut("e", modifiers: [.command, .shift])
+        .disabled(state == nil)
+    }
+}
+
+struct ExportHTMLButton: View {
+    @FocusedValue(\.appState) private var state
+
+    var body: some View {
+        Button("Export as HTML\u{2026}") {
+            guard let state else { return }
+            let name = state.selectedFile?.lastPathComponent ?? "document.md"
+            ExportManager.exportHTML(html: state.exportHTML, suggestedName: name)
+        }
+        .disabled(state == nil)
+    }
+}
+
+struct CopyRichTextButton: View {
+    @FocusedValue(\.appState) private var state
+
+    var body: some View {
+        Button("Copy as Rich Text") {
+            guard let state else { return }
+            ExportManager.copyAsRichText(body: state.renderedHTML)
+        }
+        .keyboardShortcut("c", modifiers: [.command, .option])
+        .disabled(state == nil)
     }
 }

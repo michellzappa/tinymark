@@ -3,7 +3,7 @@
 ## App Information
 
 - **App Name**: TinyMark
-- **Subtitle** (30 chars max): A minimal Markdown editor
+- **Subtitle** (30 chars max): A fast Markdown editor
 - **Bundle ID**: com.tinymark.app
 - **SKU**: tinymark-001
 - **Primary Language**: English (U.S.)
@@ -34,12 +34,15 @@ Features:
 - Multiple independent windows
 - Light and dark mode — follows your system
 - Open .md and .txt files directly from Finder
+- On-device AI assistant (Cmd+K) — ask questions, rewrite, summarize. Runs via CoreML, no API key required
 
 Built entirely with native macOS technologies. No Electron. No web views for editing. Just SwiftUI and AppKit doing what they do best.
 
+Part of TinySuite — a family of native macOS micro-tools that each do one thing well. Every app is built around the file, not around itself. No accounts, no cloud, no lock-in. Open your file, understand it, act on it. Learn more at tinysuite.app.
+
 ### Keywords (100 chars max, comma-separated)
 
-markdown,editor,writing,text,preview,notes,code,minimal,fast,developer
+markdown,editor,writing,text,preview,notes,minimal,fast,tinysuite,developer
 
 ### What's New (Version 1.0.0)
 
@@ -51,19 +54,15 @@ A fast, minimal Markdown editor for macOS. Open a folder, write, preview. No blo
 
 ### Support URL
 
-https://github.com/YOUR_USERNAME/tinymark/issues
+https://github.com/michellzappa/tinymark/issues
 
 ### Marketing URL (optional)
 
-https://github.com/YOUR_USERNAME/tinymark
+https://tinysuite.app
 
 ### Privacy Policy URL (required)
 
-<!-- You need a privacy policy URL even if the app collects no data. -->
-<!-- Options: host a simple page on GitHub Pages, or use a free generator. -->
-<!-- Example: https://YOUR_USERNAME.github.io/tinymark/privacy -->
-
-TODO: Create a simple privacy policy page stating the app collects no data.
+https://tinysuite.app/privacy.html
 
 ## Privacy Details
 

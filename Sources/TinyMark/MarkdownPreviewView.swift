@@ -113,160 +113,20 @@ struct MarkdownPreviewView: NSViewRepresentable {
             }
         }
 
-        // MARK: - Inlined template
+        // MARK: - Template loaded from bundle resource
 
-        private static let templateHTML = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <meta charset="utf-8">
-        <meta name="color-scheme" content="light dark">
-        <style>
-            :root {
-                --text: #24292f;
-                --bg: #ffffff;
-                --code-bg: #f6f8fa;
-                --border: #d0d7de;
-                --link: #007aff;
-                --blockquote: #656d76;
+        private static let templateHTML: String = {
+            if let url = Bundle.main.url(forResource: "preview", withExtension: "html"),
+               let html = try? String(contentsOf: url, encoding: .utf8) {
+                return html
             }
-            @media (prefers-color-scheme: dark) {
-                :root {
-                    --text: #e6edf3;
-                    --bg: #0d1117;
-                    --code-bg: #161b22;
-                    --border: #30363d;
-                    --link: #0a84ff;
-                    --blockquote: #8b949e;
-                }
-            }
-            * { box-sizing: border-box; }
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
-                font-size: 14px;
-                line-height: 1.6;
-                color: var(--text);
-                background: transparent;
-                max-width: 100%;
-                padding: 16px 24px;
-                margin: 0;
-                word-wrap: break-word;
-            }
-            h1, h2, h3, h4, h5, h6 {
-                margin-top: 24px;
-                margin-bottom: 16px;
-                font-weight: 600;
-                line-height: 1.25;
-            }
-            h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
-            h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
-            h3 { font-size: 1.25em; }
-            p { margin-top: 0; margin-bottom: 16px; }
-            a { color: var(--link); text-decoration: none; }
-            a:hover { text-decoration: underline; }
-            code {
-                padding: 0.2em 0.4em;
-                margin: 0;
-                font-size: 85%;
-                background: var(--code-bg);
-                border-radius: 6px;
-                font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-            }
-            pre {
-                padding: 16px;
-                overflow: auto;
-                font-size: 85%;
-                line-height: 1.45;
-                background: var(--code-bg);
-                border-radius: 6px;
-                margin-bottom: 16px;
-            }
-            pre code {
-                padding: 0;
-                background: transparent;
-                border-radius: 0;
-            }
-            blockquote {
-                margin: 0 0 16px 0;
-                padding: 0 1em;
-                color: var(--blockquote);
-                border-left: 0.25em solid var(--border);
-            }
-            ul, ol { padding-left: 2em; margin-bottom: 16px; }
-            li + li { margin-top: 0.25em; }
-            hr {
-                height: 0.25em;
-                padding: 0;
-                margin: 24px 0;
-                background-color: var(--border);
-                border: 0;
-            }
-            img { max-width: 100%; height: auto; }
-            table {
-                border-spacing: 0;
-                border-collapse: collapse;
-                margin-bottom: 16px;
-            }
-            table th, table td {
-                padding: 6px 13px;
-                border: 1px solid var(--border);
-            }
-            table th { font-weight: 600; }
-            table th {
-                background: var(--code-bg);
-            }
-            del { text-decoration: line-through; }
-            /* Task list checkboxes */
-            li > input[type="checkbox"] {
-                margin-right: 0.4em;
-                vertical-align: middle;
-                position: relative;
-                top: -1px;
-            }
-            li:has(> input[type="checkbox"]) {
-                list-style: none;
-                margin-left: -1.4em;
-            }
-            table.frontmatter {
-                width: 100%;
-                margin-bottom: 20px;
-                font-size: 12px;
-                border: 1px solid var(--border);
-                border-radius: 6px;
-                overflow: hidden;
-                background: var(--code-bg);
-            }
-            table.frontmatter td {
-                padding: 4px 10px;
-                border: none;
-                border-bottom: 1px solid var(--border);
-                vertical-align: top;
-            }
-            table.frontmatter tr:last-child td { border-bottom: none; }
-            table.frontmatter .fm-key {
-                font-weight: 600;
-                white-space: nowrap;
-                width: 1%;
-                opacity: 0.7;
-                font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
-            }
-            #content { padding-bottom: 45vh; }
-            #content:empty::before {
-                content: "No content to preview";
-                color: var(--blockquote);
-                font-style: italic;
-            }
-        </style>
-        </head>
-        <body>
-        <div id="content"></div>
-        <script>
-            function updateContent(html) {
-                document.getElementById('content').innerHTML = html;
-            }
-        </script>
-        </body>
-        </html>
-        """
+            // Minimal fallback if resource can't be loaded
+            return """
+            <!DOCTYPE html><html><head><meta charset="utf-8"></head>
+            <body><div id="content"></div>
+            <script>function updateContent(h){document.getElementById('content').innerHTML=h}</script>
+            </body></html>
+            """
+        }()
     }
 }

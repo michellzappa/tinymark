@@ -13,6 +13,38 @@ final class AppState: FileState {
         )
     }
 
+    private static let spotlightDomain = "com.tinyapps.tinymark.files"
+
+    override func didOpenFile(_ url: URL) {
+        indexFile(url)
+    }
+
+    override func didSaveFile(_ url: URL) {
+        indexFile(url)
+    }
+
+    private func indexFile(_ url: URL) {
+        // Extract first heading as display name
+        let heading = content.components(separatedBy: "\n")
+            .first(where: { $0.hasPrefix("# ") })
+            .map { String($0.dropFirst(2)).trimmingCharacters(in: .whitespaces) }
+        SpotlightIndexer.index(file: url, content: content, domainID: Self.spotlightDomain, displayName: heading)
+    }
+
+    // MARK: - Export HTML
+
+    var exportHTML: String {
+        guard let url = Bundle.main.url(forResource: "preview", withExtension: "html"),
+              let template = try? String(contentsOf: url, encoding: .utf8) else {
+            return ExportManager.wrapHTML(body: renderedHTML, title: selectedFile?.lastPathComponent ?? "document")
+        }
+        return template
+            .replacingOccurrences(of: "<div id=\"content\"></div>",
+                                  with: "<div id=\"content\">\(renderedHTML)</div>")
+            .replacingOccurrences(of: "background: transparent;",
+                                  with: "background: var(--bg);")
+    }
+
     // MARK: - File type detection
 
     var isSVGFile: Bool {
