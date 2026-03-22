@@ -1,6 +1,6 @@
 # TinyMark
 
-A minimal, fast Markdown editor for macOS.
+A native macOS Markdown editor. Write on the left, see it rendered on the right, browse your folder on the side.
 
 ![macOS](https://img.shields.io/badge/macOS-26%2B-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)

@@ -1,6 +1,7 @@
 import SwiftUI
 import AppKit
 import TinyKit
+import UniformTypeIdentifiers
 
 // MARK: - FocusedValue key for per-window AppState
 
@@ -44,12 +45,29 @@ struct TinyMarkApp: App {
                 Button("Welcome to TinyMark") {
                     NotificationCenter.default.post(name: .showWelcome, object: nil)
                 }
+                Divider()
+                Button("Feedback\u{2026}") {
+                    NSWorkspace.shared.open(URL(string: "https://tinysuite.app/support.html")!)
+                }
+                Button("TinySuite Website") {
+                    NSWorkspace.shared.open(URL(string: "https://tinysuite.app")!)
+                }
+            }
+
+            CommandGroup(replacing: .help) {
+                Button("TinyMark on GitHub") {
+                    NSWorkspace.shared.open(URL(string: "https://github.com/michellzappa/tinymark")!)
+                }
             }
 
             CommandGroup(after: .newItem) {
                 OpenFileButton()
 
                 OpenFolderButton()
+
+                RecentFilesMenu { url in
+                    activeState?.selectFile(url)
+                }
 
                 Divider()
 
@@ -92,6 +110,9 @@ struct WindowContentView: View {
 
     var body: some View {
         ContentView(state: state, columnVisibility: $columnVisibility)
+            .defaultAppBanner(appName: "TinyMark", associations: [
+                FileTypeAssociation(utType: UTType("net.daringfireball.markdown") ?? .plainText, label: ".md files"),
+            ])
             .navigationTitle(state.selectedFile?.lastPathComponent ?? "TinyMark")
             .focusedSceneValue(\.appState, state)
             .onAppear {
@@ -120,13 +141,14 @@ struct WindowContentView: View {
             .welcomeSheet(
                 isPresented: $showWelcome,
                 appName: "TinyMark",
-                subtitle: "A minimal Markdown editor",
+                subtitle: "A minimal, fast Markdown editor for macOS.",
                 features: [
                     ("folder", "Open a Folder", "Browse and edit Markdown files from the sidebar."),
                     ("rectangle.split.2x1", "Write and Preview", "Side-by-side editor with live preview."),
                     ("bolt.fill", "Auto-Save", "Changes saved automatically as you type."),
                 ],
-                onOpen: { state.openFolder() },
+                onOpenFolder: { state.openFolder() },
+                onOpenFile: { state.openFile() },
                 onDismiss: { state.restoreLastFolder() }
             )
             .background(WindowCloseGuard(state: state))

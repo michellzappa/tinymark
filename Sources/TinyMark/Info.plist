@@ -16,6 +16,8 @@
 				<string>mkdn</string>
 				<string>mdx</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>doc_md</string>
 			<key>CFBundleTypeName</key>
 			<string>Markdown Document</string>
 			<key>CFBundleTypeRole</key>

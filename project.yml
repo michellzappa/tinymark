@@ -26,6 +26,8 @@ targets:
         buildPhase: resources
       - path: Sources/TinyMark/Resources/AppIcon.icon
         buildPhase: resources
+      - path: Sources/TinyMark/Resources/DocIcons
+        buildPhase: resources
     info:
       path: Sources/TinyMark/Info.plist
       properties:
@@ -33,6 +35,7 @@ targets:
           - CFBundleTypeName: Markdown Document
             CFBundleTypeRole: Editor
             LSHandlerRank: Default
+            CFBundleTypeIconFile: doc_md
             LSItemContentTypes:
               - net.daringfireball.markdown
             CFBundleTypeExtensions:
