@@ -1,0 +1,17 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build TinyMark
+        run: xcodebuild clean build -project TinyMark.xcodeproj -scheme TinyMark -configuration Release -derivedDataPath /tmp/tinybuild/tinymark CODE_SIGN_IDENTITY="-"
