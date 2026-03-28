@@ -1,0 +1,443 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01B099FAACEBA821B9E6ED6A /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 65903065C2B3CFC6BEC85EB6 /* AppIcon.icon */; };
+		4D2215B7AC6C31AF73266471 /* MarkdownPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F21E6068DB8EA2681323C2D /* MarkdownPreviewView.swift */; };
+		684F66A7694C8E2A32916DF8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD9AA5050B4FF8CC105CE431 /* Assets.xcassets */; };
+		6DB342DDD899BB0EA77C8A23 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8691D5C0B10438952634581 /* ContentView.swift */; };
+		7ADE63403568984D7548F2F3 /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = AA7ECC7D2F9949FDDCDA13B1 /* Markdown */; };
+		8362D552F74A6E4850D83F33 /* SyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B7E8C3B5DAFF18FF5DA033 /* SyntaxHighlighter.swift */; };
+		B5D3DAE9CA3E99E29BF132C3 /* TinyKit in Frameworks */ = {isa = PBXBuildFile; productRef = F57E40568D6BA95D33E65453 /* TinyKit */; };
+		BD45406E14B0101E316315B2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD1D38141174C757259FCD1 /* AppState.swift */; };
+		BF0AAEC9B73FF6FBD3DECC26 /* doc_md.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4621228FD75E44DF31FF0505 /* doc_md.icns */; };
+		C6452B8D882CC876F1A584FF /* MarkdownEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9A1F194F093CE8B9B213 /* MarkdownEditorView.swift */; };
+		C9D3D11A9002D403CB5798E6 /* preview.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F5337B8B76C5CF95B36E3F9 /* preview.html */; };
+		E9BFA88F20E9B54DA55EDEB0 /* TinyMarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0CE225ACF55DAB8C277589 /* TinyMarkApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3E0CE225ACF55DAB8C277589 /* TinyMarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyMarkApp.swift; sourceTree = "<group>"; };
+		4621228FD75E44DF31FF0505 /* doc_md.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = doc_md.icns; sourceTree = "<group>"; };
+		475E07B68B691C71E19A1300 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4F5337B8B76C5CF95B36E3F9 /* preview.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = preview.html; sourceTree = "<group>"; };
+		65903065C2B3CFC6BEC85EB6 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		67B7E8C3B5DAFF18FF5DA033 /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
+		6F21E6068DB8EA2681323C2D /* MarkdownPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownPreviewView.swift; sourceTree = "<group>"; };
+		8B0B9A1F194F093CE8B9B213 /* MarkdownEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditorView.swift; sourceTree = "<group>"; };
+		B8691D5C0B10438952634581 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BBD1D38141174C757259FCD1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		CD2B13474D8CE5E31C12C1CF /* TinyMark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyMark.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD9AA5050B4FF8CC105CE431 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D5A072C7E288AF418B91C000 /* TinyKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TinyKit; path = Packages/TinyKit; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EF9B108E81FFDFFB7616C4B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7ADE63403568984D7548F2F3 /* Markdown in Frameworks */,
+				B5D3DAE9CA3E99E29BF132C3 /* TinyKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08697C2B0AC0A4C106423A15 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				D5A072C7E288AF418B91C000 /* TinyKit */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		32FECEB1EC1506F67BC388F7 = {
+			isa = PBXGroup;
+			children = (
+				722BFBD989F85AFE52E21B0A /* DocIcons */,
+				08697C2B0AC0A4C106423A15 /* Packages */,
+				973CBAA299D86972E8A2A319 /* Resources */,
+				662DB97A120C8EFEAD996C99 /* TinyMark */,
+				3AFDEB0B0DBEEF8F50E2E18C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3AFDEB0B0DBEEF8F50E2E18C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CD2B13474D8CE5E31C12C1CF /* TinyMark.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		662DB97A120C8EFEAD996C99 /* TinyMark */ = {
+			isa = PBXGroup;
+			children = (
+				BBD1D38141174C757259FCD1 /* AppState.swift */,
+				B8691D5C0B10438952634581 /* ContentView.swift */,
+				475E07B68B691C71E19A1300 /* Info.plist */,
+				8B0B9A1F194F093CE8B9B213 /* MarkdownEditorView.swift */,
+				6F21E6068DB8EA2681323C2D /* MarkdownPreviewView.swift */,
+				67B7E8C3B5DAFF18FF5DA033 /* SyntaxHighlighter.swift */,
+				3E0CE225ACF55DAB8C277589 /* TinyMarkApp.swift */,
+			);
+			name = TinyMark;
+			path = Sources/TinyMark;
+			sourceTree = "<group>";
+		};
+		722BFBD989F85AFE52E21B0A /* DocIcons */ = {
+			isa = PBXGroup;
+			children = (
+				4621228FD75E44DF31FF0505 /* doc_md.icns */,
+			);
+			name = DocIcons;
+			path = Sources/TinyMark/Resources/DocIcons;
+			sourceTree = "<group>";
+		};
+		973CBAA299D86972E8A2A319 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				65903065C2B3CFC6BEC85EB6 /* AppIcon.icon */,
+				CD9AA5050B4FF8CC105CE431 /* Assets.xcassets */,
+				4F5337B8B76C5CF95B36E3F9 /* preview.html */,
+			);
+			name = Resources;
+			path = Sources/TinyMark/Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		80596731F10F70043D4938B5 /* TinyMark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BC4C02ECD0F8818C67289CC /* Build configuration list for PBXNativeTarget "TinyMark" */;
+			buildPhases = (
+				F71DD4BEC2EEF848BBC19D7B /* Sources */,
+				63678CEDC0ABA20A7ACE1E34 /* Resources */,
+				EF9B108E81FFDFFB7616C4B0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TinyMark;
+			packageProductDependencies = (
+				AA7ECC7D2F9949FDDCDA13B1 /* Markdown */,
+				F57E40568D6BA95D33E65453 /* TinyKit */,
+			);
+			productName = TinyMark;
+			productReference = CD2B13474D8CE5E31C12C1CF /* TinyMark.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6CA689EF4287229B6D3BAD2E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					80596731F10F70043D4938B5 = {
+						DevelopmentTeam = 992N457T8D;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 0A7921F4B3314BBE26074454 /* Build configuration list for PBXProject "TinyMark" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 32FECEB1EC1506F67BC388F7;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9A19776DDD5B468F3896808D /* XCRemoteSwiftPackageReference "swift-markdown" */,
+				6686F3CB4B15A041E125E650 /* XCLocalSwiftPackageReference "Packages/TinyKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3AFDEB0B0DBEEF8F50E2E18C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				80596731F10F70043D4938B5 /* TinyMark */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		63678CEDC0ABA20A7ACE1E34 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01B099FAACEBA821B9E6ED6A /* AppIcon.icon in Resources */,
+				684F66A7694C8E2A32916DF8 /* Assets.xcassets in Resources */,
+				BF0AAEC9B73FF6FBD3DECC26 /* doc_md.icns in Resources */,
+				C9D3D11A9002D403CB5798E6 /* preview.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F71DD4BEC2EEF848BBC19D7B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD45406E14B0101E316315B2 /* AppState.swift in Sources */,
+				6DB342DDD899BB0EA77C8A23 /* ContentView.swift in Sources */,
+				C6452B8D882CC876F1A584FF /* MarkdownEditorView.swift in Sources */,
+				4D2215B7AC6C31AF73266471 /* MarkdownPreviewView.swift in Sources */,
+				8362D552F74A6E4850D83F33 /* SyntaxHighlighter.swift in Sources */,
+				E9BFA88F20E9B54DA55EDEB0 /* TinyMarkApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		201CA2109B2CC034D6F1832E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		31AB55A35CAEF814EC2BD19D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = TinyMark.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 992N457T8D;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/TinyMark/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tinymark.app;
+				PRODUCT_NAME = TinyMark;
+				SDKROOT = macosx;
+				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		3452EE77B11A1503B7D6B750 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3EBF39F87C29AA2ABB9923E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = TinyMark.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 992N457T8D;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/TinyMark/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tinymark.app;
+				PRODUCT_NAME = TinyMark;
+				SDKROOT = macosx;
+				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A7921F4B3314BBE26074454 /* Build configuration list for PBXProject "TinyMark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				201CA2109B2CC034D6F1832E /* Debug */,
+				3452EE77B11A1503B7D6B750 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4BC4C02ECD0F8818C67289CC /* Build configuration list for PBXNativeTarget "TinyMark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31AB55A35CAEF814EC2BD19D /* Debug */,
+				3EBF39F87C29AA2ABB9923E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		6686F3CB4B15A041E125E650 /* XCLocalSwiftPackageReference "Packages/TinyKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TinyKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9A19776DDD5B468F3896808D /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-markdown.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA7ECC7D2F9949FDDCDA13B1 /* Markdown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9A19776DDD5B468F3896808D /* XCRemoteSwiftPackageReference "swift-markdown" */;
+			productName = Markdown;
+		};
+		F57E40568D6BA95D33E65453 /* TinyKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TinyKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 6CA689EF4287229B6D3BAD2E /* Project object */;
+}

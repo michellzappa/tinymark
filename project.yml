@@ -92,3 +92,9 @@ targets:
         product: Markdown
       - package: TinyKit
         product: TinyKit
+
+schemes:
+  TinyMark:
+    build:
+      targets:
+        TinyMark: all
