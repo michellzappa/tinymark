@@ -37,6 +37,8 @@ A native macOS Markdown editor. Write on the left, see it rendered on the right,
 ## Build
 
 ```bash
+xcodegen generate --spec project.yml
+
 xcodebuild clean build \
   -project TinyMark.xcodeproj \
   -scheme TinyMark \
@@ -44,7 +46,9 @@ xcodebuild clean build \
   -derivedDataPath /tmp/tinybuild/tinymark \
   CODE_SIGN_IDENTITY="-"
 
+rm -rf /Applications/TinyMark.app
 cp -R /tmp/tinybuild/tinymark/Build/Products/Release/TinyMark.app /Applications/
+xattr -cr /Applications/TinyMark.app
 ```
 
 ## Keyboard Shortcuts

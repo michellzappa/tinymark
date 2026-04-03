@@ -88,6 +88,8 @@ struct TinyMarkApp: App {
 
                 Divider()
 
+                CopyMarkdownButton()
+                CopyHTMLButton()
                 CopyRichTextButton()
             }
 
@@ -240,6 +242,34 @@ struct ExportHTMLButton: View {
             guard let state else { return }
             let name = state.selectedFile?.lastPathComponent ?? "document.md"
             ExportManager.exportHTML(html: state.exportHTML, suggestedName: name)
+        }
+        .disabled(state == nil)
+    }
+}
+
+struct CopyMarkdownButton: View {
+    @FocusedValue(\.appState) private var state
+
+    var body: some View {
+        Button("Copy as Markdown") {
+            guard let state else { return }
+            ExportManager.copyAsPlainText(state.content)
+        }
+        .keyboardShortcut("c", modifiers: [.command, .shift])
+        .disabled(state == nil)
+    }
+}
+
+struct CopyHTMLButton: View {
+    @FocusedValue(\.appState) private var state
+
+    var body: some View {
+        Button("Copy as HTML") {
+            guard let state else { return }
+            ExportManager.copyAsHTMLSource(
+                body: state.renderedHTML,
+                title: state.selectedFile?.lastPathComponent ?? "document"
+            )
         }
         .disabled(state == nil)
     }
