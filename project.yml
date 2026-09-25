@@ -2,7 +2,7 @@ name: TinyMark
 options:
   bundleIdPrefix: com.tinymark
   deploymentTarget:
-    macOS: "15.0"
+    macOS: "26.0"
   xcodeVersion: "16.0"
 
 packages:
@@ -81,7 +81,7 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.productivity"
         INFOPLIST_KEY_NSHumanReadableCopyright: ""
         SWIFT_VERSION: "5.9"
-        MACOSX_DEPLOYMENT_TARGET: "15.0"
+        MACOSX_DEPLOYMENT_TARGET: "26.0"
         DEVELOPMENT_TEAM: 992N457T8D
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_IDENTITY: "Apple Development"
@@ -94,9 +94,24 @@ targets:
         product: Markdown
       - package: TinyKit
         product: TinyKit
+  TinyMarkUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources:
+      - path: UITests/TinyMarkUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.tinymark.app.uitests
+        TEST_TARGET_NAME: TinyMark
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: TinyMark
 
 schemes:
   TinyMark:
     build:
       targets:
         TinyMark: all
+    test:
+      targets:
+        - name: TinyMarkUITests

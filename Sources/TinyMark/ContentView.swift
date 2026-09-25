@@ -20,6 +20,12 @@ struct ContentView: View {
         previewUserPref && (state.isMarkdownFile || state.isSVGFile)
     }
 
+    private var uiSmokeStatus: String {
+        let fileName = state.selectedFile?.lastPathComponent ?? "no-file"
+        let mode = state.isSVGFile ? "svg" : (state.isMarkdownFile ? "markdown" : "text")
+        return "\(fileName) mode:\(mode)"
+    }
+
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             TinyFileList(state: state)
@@ -43,6 +49,9 @@ struct ContentView: View {
                 StatusBarView(text: state.content)
             }
             .modifier(CmdKOverlay(aiState: aiState, editorBridge: editorBridge, content: state.content, fileExtension: state.selectedFile?.pathExtension))
+        }
+        .overlay(alignment: .bottomTrailing) {
+            TinyUITestProbe(text: uiSmokeStatus)
         }
         .onDisappear {
             if let monitor = eventMonitor {

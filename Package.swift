@@ -15,9 +15,15 @@ let package = Package(
                 .product(name: "Markdown", package: "swift-markdown"),
                 .product(name: "TinyKit", package: "TinyKit"),
             ],
+            exclude: ["Info.plist"],
             resources: [
                 .process("Resources"),
             ],
+            swiftSettings: [.swiftLanguageMode(.v5)]
+        ),
+        .testTarget(
+            name: "TinyMarkTests",
+            dependencies: ["TinyMark"],
             swiftSettings: [.swiftLanguageMode(.v5)]
         ),
     ]

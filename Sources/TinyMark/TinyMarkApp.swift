@@ -119,7 +119,9 @@ struct WindowContentView: View {
             .focusedSceneValue(\.appState, state)
             .onAppear {
                 // Handle files passed via Finder before the window appeared
-                if !TinyAppDelegate.pendingFiles.isEmpty {
+                if let fixture = TinyRuntime.fixtureURL {
+                    openFiles([fixture])
+                } else if !TinyAppDelegate.pendingFiles.isEmpty {
                     let files = TinyAppDelegate.pendingFiles
                     TinyAppDelegate.pendingFiles.removeAll()
                     openFiles(files)

@@ -19,7 +19,18 @@
 		C6452B8D882CC876F1A584FF /* MarkdownEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9A1F194F093CE8B9B213 /* MarkdownEditorView.swift */; };
 		C9D3D11A9002D403CB5798E6 /* preview.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F5337B8B76C5CF95B36E3F9 /* preview.html */; };
 		E9BFA88F20E9B54DA55EDEB0 /* TinyMarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0CE225ACF55DAB8C277589 /* TinyMarkApp.swift */; };
+		EE3143909A44EEE14133BFA9 /* TinyMarkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67D650B44CCF86CA5C72B9 /* TinyMarkUITests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DC7A13224F26893082E128F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CA689EF4287229B6D3BAD2E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 80596731F10F70043D4938B5;
+			remoteInfo = TinyMark;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		3E0CE225ACF55DAB8C277589 /* TinyMarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyMarkApp.swift; sourceTree = "<group>"; };
@@ -29,12 +40,14 @@
 		65903065C2B3CFC6BEC85EB6 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		67B7E8C3B5DAFF18FF5DA033 /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
 		6F21E6068DB8EA2681323C2D /* MarkdownPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownPreviewView.swift; sourceTree = "<group>"; };
+		7D7BF221CDC661BD6F70247A /* TinyMarkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyMarkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B0B9A1F194F093CE8B9B213 /* MarkdownEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditorView.swift; sourceTree = "<group>"; };
 		B8691D5C0B10438952634581 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BBD1D38141174C757259FCD1 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		CD2B13474D8CE5E31C12C1CF /* TinyMark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyMark.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD9AA5050B4FF8CC105CE431 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D5A072C7E288AF418B91C000 /* TinyKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TinyKit; path = Packages/TinyKit; sourceTree = SOURCE_ROOT; };
+		ED67D650B44CCF86CA5C72B9 /* TinyMarkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyMarkUITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +78,7 @@
 				08697C2B0AC0A4C106423A15 /* Packages */,
 				973CBAA299D86972E8A2A319 /* Resources */,
 				662DB97A120C8EFEAD996C99 /* TinyMark */,
+				FC193101A4E02193AE8B093D /* TinyMarkUITests */,
 				3AFDEB0B0DBEEF8F50E2E18C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				CD2B13474D8CE5E31C12C1CF /* TinyMark.app */,
+				7D7BF221CDC661BD6F70247A /* TinyMarkUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -112,6 +127,15 @@
 			path = Sources/TinyMark/Resources;
 			sourceTree = "<group>";
 		};
+		FC193101A4E02193AE8B093D /* TinyMarkUITests */ = {
+			isa = PBXGroup;
+			children = (
+				ED67D650B44CCF86CA5C72B9 /* TinyMarkUITests.swift */,
+			);
+			name = TinyMarkUITests;
+			path = UITests/TinyMarkUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -136,6 +160,24 @@
 			productReference = CD2B13474D8CE5E31C12C1CF /* TinyMark.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D052258D8CC0EE32FEA1A8BF /* TinyMarkUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A688BB29777FA6F246D32102 /* Build configuration list for PBXNativeTarget "TinyMarkUITests" */;
+			buildPhases = (
+				ADDC1E2D6F9D5A502401EEBF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AB35BE0B1018545B5B16F4FE /* PBXTargetDependency */,
+			);
+			name = TinyMarkUITests;
+			packageProductDependencies = (
+			);
+			productName = TinyMarkUITests;
+			productReference = 7D7BF221CDC661BD6F70247A /* TinyMarkUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -148,6 +190,9 @@
 					80596731F10F70043D4938B5 = {
 						DevelopmentTeam = 992N457T8D;
 						ProvisioningStyle = Automatic;
+					};
+					D052258D8CC0EE32FEA1A8BF = {
+						TestTargetID = 80596731F10F70043D4938B5;
 					};
 				};
 			};
@@ -170,6 +215,7 @@
 			projectRoot = "";
 			targets = (
 				80596731F10F70043D4938B5 /* TinyMark */,
+				D052258D8CC0EE32FEA1A8BF /* TinyMarkUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -189,6 +235,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		ADDC1E2D6F9D5A502401EEBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE3143909A44EEE14133BFA9 /* TinyMarkUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F71DD4BEC2EEF848BBC19D7B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -204,7 +258,32 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		AB35BE0B1018545B5B16F4FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 80596731F10F70043D4938B5 /* TinyMark */;
+			targetProxy = DC7A13224F26893082E128F6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		19E355D205A3D87C75183D53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tinymark.app.uitests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = TinyMark;
+			};
+			name = Debug;
+		};
 		201CA2109B2CC034D6F1832E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -256,7 +335,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -289,7 +368,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tinymark.app;
 				PRODUCT_NAME = TinyMark;
@@ -344,7 +423,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -376,13 +455,30 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tinymark.app;
 				PRODUCT_NAME = TinyMark;
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		A07115B77E44CD8A83BC54B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tinymark.app.uitests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = TinyMark;
 			};
 			name = Release;
 		};
@@ -403,6 +499,15 @@
 			buildConfigurations = (
 				31AB55A35CAEF814EC2BD19D /* Debug */,
 				3EBF39F87C29AA2ABB9923E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A688BB29777FA6F246D32102 /* Build configuration list for PBXNativeTarget "TinyMarkUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19E355D205A3D87C75183D53 /* Debug */,
+				A07115B77E44CD8A83BC54B7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
